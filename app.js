@@ -45,6 +45,7 @@ $(function() {
     $(".tile").draggable({
         grid: [parseInt(tile_w), parseInt(tile_h)], //拖曳時移動單位(以一個珠子的尺寸為移動單位)
         drag: function(e, ui){
+            console.log("dragging!");
             combo_cnt=0;
             $('#combo').val(combo_cnt);
             $(this).addClass('sel'); //拖曳中珠子的樣式
@@ -54,9 +55,12 @@ $(function() {
             pos_y = selTop/tile_h;
             var cur_n = pos_x+'-'+pos_y; //拖曳中珠子的位置 "x-y"，與ID相同
             //目標位置與ID不同時，表示被移動了
-            if (cur_n!=$(this).attr('id')){
+            if (cur_n !== $(this).attr('id')){
                 var ori = $(this).attr('id'); //原本的ID(即原本的位置)
+                console.log("original position is: " + ori);
+                console.log("current position is: " + cur_n);
                 moveTo(cur_n, ori); //將目標位置的珠子移到原本拖曳中珠子的位置
+                //console.log($(this));
                 $(this).attr('id', cur_n); //拖曳中珠子標示為新位罝ID
             }
         },
@@ -66,7 +70,34 @@ $(function() {
         },
         containment: ".demo", //限制珠子的移動範圍
     });
+    
+    testExchange();
 });
+
+function testExchange(){
+    setInterval(function(){
+        console.log("testing!");
+        exchangePos('2-3', '2-2');
+    }, 500);
+}
+
+//exchange two tiles' positions wihtout dragging
+function exchangePos(newPos, oldPos){
+     $('#' + oldPos).addClass('select');
+     var oldPosArr = oldPos.split("-");
+     var newPosArr = newPos.split("-");
+     var x1 = newPosArr[0]*tile_w;
+     var y1 = newPosArr[1]*tile_h;
+     var x2 = oldPosArr[0]*tile_w;
+     var y2 = oldPosArr[1]*tile_h;
+      $('#'+ newPos).attr('id', oldPos);
+      $('.select').attr('id', newPos);
+      $('#' + newPos).removeClass('select');
+     
+     $('#'+ newPos).animate({'top':y2, 'left':x2}, {'duration':move_speed});
+     $('#'+ oldPos).animate({'top':y1, 'left':x1}, {'duration':move_speed});
+
+}
 
 //移動珠子
 function moveTo(id, pos){
@@ -182,6 +213,7 @@ function makeChain() {
             var y = parseInt(ap[1]);
             rx = flagMatrix[x][y].repeatX;
             ry = flagMatrix[x][y].repeatY;
+            
             if (rx >= 2){
                 var ofs_x = rx - parseInt(flagMatrix[x][y].xn);
                 x = x - ofs_x;
@@ -204,7 +236,8 @@ function makeChain() {
                     }
                 }
             }
-            if (ry>1){
+            
+            if (ry >= 2 ){
                 var ofs_y = ry - parseInt(flagMatrix[x][y].yn);
                 y = y-ofs_y;
                 for (var b=0; b<=ry; b++){
@@ -226,6 +259,7 @@ function makeChain() {
                     }
                 }
             }
+            
             combo_n++;
         }
         
