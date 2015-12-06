@@ -5,10 +5,10 @@ var tile_w = 60; //每塊寬px
 var tile_h = 80; //每塊高px
 var tile_b = 1; //每塊框線px
 
-var sky_speed = 800; // 天降珠的速度
-var grav_speed = 800; // 自然落珠的速度
+var sky_speed = 400; // 天降珠的速度
+var grav_speed = 400; // 自然落珠的速度
 var move_speed = 40; // 移動珠子的速度
-var gone_speed = 400; // 珠子消除的速度
+var gone_speed = 200; // 珠子消除的速度
 
 var combo_cnt;
 
@@ -128,7 +128,7 @@ function makeChain() {
             if (y > 0) {
                 var curY_TileClr = $('#'+x+'-'+y).attr('data-clr');
                 var lasY_TileClr = $('#'+x+'-'+(y-1)).attr('data-clr');
-                //目前X軸這顆的顏色 和 X軸上一顆的顏色 相同，repeatY+1
+                //目前Y軸這顆的顏色 和 Y軸上一顆的顏色 相同，repeatY+1
                 if (curY_TileClr == lasY_TileClr){
                     repeatY = flagMatrix[x][y-1].repeatY+1;
                 }else{
@@ -136,7 +136,7 @@ function makeChain() {
                 }
                 clr = curY_TileClr;
                 //repeatY>1表示有三顆相同，成為Chain了     
-                if (repeatY > 1) {
+                if (repeatY >= 2) {
                     var i = repeatY;
                     for (i; i > 0; i--) {
                         flagMatrix[x][y - i].repeatY = repeatY;
@@ -145,8 +145,13 @@ function makeChain() {
                     }
                 }
             }
+           
             flagMatrix[x][y] = new repeatMap(repeatX, repeatY, clr, xn, yn);
+            
             //$('#'+x+'-'+y).html(flagMatrix[x][y].repeatX+':'+flagMatrix[x][y].repeatY);
+            // if (x > 0 || y > 0)
+            //    console.log("x: " + x + " y: " + y + " " + flagMatrix[x][y].repeatY + " " + flagMatrix[x][y].repeatY);
+        
         }
     }
     // 記錄完Chain了，開始準備消除珠子
@@ -157,12 +162,14 @@ function makeChain() {
     //收集combo group
     for ( x = 0; x < dim_x; x++) {
         for ( y = 0; y < dim_y; y++) {
-            if (flagMatrix[x][y].repeatX > 1 || flagMatrix[x][y].repeatY > 1) {
+            if (flagMatrix[x][y].repeatX >= 2 || flagMatrix[x][y].repeatY >= 2
+            ) {
                 aryChains.push(x+'-'+y);
             }
         }
     }
-    console.log(aryChains);
+    
+    console.log("combo group: " + aryChains);
     
     var combo_n = 0;
     for ( var i = 0; i < aryChains.length; i++){
@@ -175,12 +182,12 @@ function makeChain() {
             var y = parseInt(ap[1]);
             rx = flagMatrix[x][y].repeatX;
             ry = flagMatrix[x][y].repeatY;
-            if (rx>1){
+            if (rx >= 2){
                 var ofs_x = rx - parseInt(flagMatrix[x][y].xn);
-                x = x-ofs_x;
-                for (var a=0; a<=rx; a++){
-                    if (!isChecked(aryChk, (x+a)+'-'+y)){
-                        aryChk.push((x+a)+'-'+y);
+                x = x - ofs_x;
+                for (var a = 0; a <= rx; ++a){
+                    if (!isChecked(aryChk, (x + a) + '-' + y)){
+                        aryChk.push((x + a)+ '-' +y);
                         aryCombo[combo_n].push((x+a)+'-'+y);
                         sry = flagMatrix[x+a][y].repeatY;
                         syn = flagMatrix[x+a][y].yn;
@@ -223,7 +230,7 @@ function makeChain() {
         }
         
     }
-    console.log(aryCombo);
+    console.log("array of combo: " + aryCombo);
     
     //走訪combo chain
     for ( var d = 0; d < aryCombo.length; d++){
@@ -234,23 +241,9 @@ function makeChain() {
             var y = aryP[1];
             
         }
+        
         $('#combo').val(++combo_cnt);
-        /*
-        $('.c'+d).each(function(){
-            $(document).queue((function (el) {
-                return function () {
-                    el.animate({'opacity':0.2}, gone_speed, function () { 
-                        $(document).dequeue(); 
-                    });
-                }; 
-            })($(this)) );
-        });
-        */
     }
-    
-    
-    //console.log(ems);
-    //animateElems(ems);
     
     for ( x = 0; x < dim_x; x++) {
         for ( y = 0; y < dim_y; y++) {
@@ -378,9 +371,9 @@ function gravity() {
         //隨機取色珠的母體 (暗珠:16/20)
         var clrs = [
             'r','g','b','p','y',
-            'p','p','p','p','p',
-            'p','p','p','p','p',
-            'p','p','p','p','p'
+            //'p','p','p','p','p',
+            //'p','p','p','p','p',
+            //'p','p','p','p','p'
         ];
         var clr = pickRandColor(clrs);
         $(this).removeClass('r g b p y gone');
