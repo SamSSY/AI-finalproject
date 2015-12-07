@@ -70,7 +70,7 @@ function makeChain() {
                 }
                 clr = curX_TileClr;
                 //repeatX>1表示有三顆相同，成為Chain了                
-                if (repeatX > 1) {
+                if (repeatX >= 2) {
                     var i = repeatX;
                     //將X Chain上的每一顆都標上此Chain的總顆數
                     for (i; i > 0; i--) {
@@ -80,6 +80,7 @@ function makeChain() {
                     }
                 }
             }
+            
             if (y > 0) {
                 var curY_TileClr = $('#'+x+'-'+y).attr('data-clr');
                 var lasY_TileClr = $('#'+x+'-'+(y-1)).attr('data-clr');
@@ -106,9 +107,9 @@ function makeChain() {
             //$('#'+x+'-'+y).html(flagMatrix[x][y].repeatX+':'+flagMatrix[x][y].repeatY);
             // if (x > 0 || y > 0)
             //    console.log("x: " + x + " y: " + y + " " + flagMatrix[x][y].repeatY + " " + flagMatrix[x][y].repeatY);
-        
         }
     }
+    
     // 記錄完Chain了，開始準備消除珠子
     var flag = false;
     var aryChk = new Array();
@@ -183,7 +184,6 @@ function makeChain() {
                     }
                 }
             }
-            
             combo_n++;
         }
         

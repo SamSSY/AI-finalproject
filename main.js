@@ -4,7 +4,7 @@ $(function() {
     $(".tile").draggable({
         grid: [parseInt(tile_w), parseInt(tile_h)], //拖曳時移動單位(以一個珠子的尺寸為移動單位)
         drag: function(e, ui){
-            console.log("dragging!");
+            //console.log("dragging!");
             combo_cnt=0;
             $('#combo').val(combo_cnt);
             $(this).addClass('sel'); //拖曳中珠子的樣式
