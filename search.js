@@ -16,6 +16,6 @@ function search(){
 
 // run search algorithm 
 $(function() {
-	search();
+	//search();
 	$(document).on("moveDone", makeChain);
 });
