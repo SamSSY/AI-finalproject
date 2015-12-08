@@ -29,5 +29,4 @@ $(function() {
         containment: ".demo", //限制珠子的移動範圍
     });
     
-    testExchange();
 });

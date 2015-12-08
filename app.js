@@ -1,12 +1,6 @@
-function testExchange(){
-    setInterval(function(){
-        console.log("testing!");
-        exchangePos('2-3', '2-2');
-    }, 500);
-}
-
 //exchange two tiles' positions wihtout dragging
 function exchangePos(newPos, oldPos){
+     log('exchange!');
      $('#' + oldPos).addClass('select');
      var oldPosArr = oldPos.split("-");
      var newPosArr = newPos.split("-");
@@ -14,12 +8,11 @@ function exchangePos(newPos, oldPos){
      var y1 = newPosArr[1]*tile_h;
      var x2 = oldPosArr[0]*tile_w;
      var y2 = oldPosArr[1]*tile_h;
-      $('#'+ newPos).attr('id', oldPos);
-      $('.select').attr('id', newPos);
-      $('#' + newPos).removeClass('select');
-     
      $('#'+ newPos).animate({'top':y2, 'left':x2}, {'duration':move_speed});
      $('#'+ oldPos).animate({'top':y1, 'left':x1}, {'duration':move_speed});
+     $('#'+ newPos).attr('id', oldPos);
+     $('.select').attr('id', newPos);
+     $('#' + newPos).removeClass('select');
 
 }
 
