@@ -1,6 +1,7 @@
 $(function() {
     init();
-
+    
+    // tiles configuration
     $(".tile").draggable({
         grid: [parseInt(tile_w), parseInt(tile_h)], //拖曳時移動單位(以一個珠子的尺寸為移動單位)
         drag: function(e, ui){
@@ -16,8 +17,6 @@ $(function() {
             //目標位置與ID不同時，表示被移動了
             if (cur_n !== $(this).attr('id')){
                 var ori = $(this).attr('id'); //原本的ID(即原本的位置)
-                //console.log("original position is: " + ori);
-                //console.log("current position is: " + cur_n);
                 moveTo(cur_n, ori); //將目標位置的珠子移到原本拖曳中珠子的位置
                 $(this).attr('id', cur_n); //拖曳中珠子標示為新位罝ID
             }
@@ -28,5 +27,7 @@ $(function() {
         },
         containment: ".demo", //限制珠子的移動範圍
     });
+    
+    
     
 });

@@ -27,11 +27,6 @@ function testMove(){
 // run test functions
 $(function() {
     //testExchange();
-    //setTimeout(function(){
-    //    moveUp('2-2');
-    //    moveLeft('2-3');
-    //    moveRight('2-4');
-    //}, 1000);
     //testMoveUp();
-    testMove();    
+    //testMove();    
 });

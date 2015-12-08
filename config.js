@@ -3,7 +3,7 @@ var dim_x = 6; //盤面x顆數
 var dim_y = 5; //盤面y顆數
 var tile_w = 60; //每塊寬px
 var tile_h = 80; //每塊高px
-var tile_b = 1; //每塊框線px
+var tile_b = 0.5; //每塊框線px
 
 var sky_speed = 400; // 天降珠的速度
 var grav_speed = 400; // 自然落珠的速度

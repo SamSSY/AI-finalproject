@@ -1,6 +1,6 @@
 //exchange two tiles' positions wihtout dragging
 function exchangePos(newPos, oldPos){
-     log('exchange!');
+    
      $('#' + oldPos).addClass('select');
      var oldPosArr = oldPos.split("-");
      var newPosArr = newPos.split("-");
