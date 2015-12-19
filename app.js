@@ -1,51 +1,25 @@
-//exchange two tiles' positions wihtout dragging
-function exchangePos(newPos, oldPos){
-    
-     $('#' + oldPos).addClass('select');
-     var oldPosArr = oldPos.split("-");
-     var newPosArr = newPos.split("-");
-     var x1 = newPosArr[0]*tile_w;
-     var y1 = newPosArr[1]*tile_h;
-     var x2 = oldPosArr[0]*tile_w;
-     var y2 = oldPosArr[1]*tile_h;
-     $('#'+ newPos).animate({'top':y2, 'left':x2}, {'duration':move_speed});
-     $('#'+ oldPos).animate({'top':y1, 'left':x1}, {'duration':move_speed});
-     $('#'+ newPos).attr('id', oldPos);
-     $('.select').attr('id', newPos);
-     $('#' + newPos).removeClass('select');
-
-}
-
-//移動珠子
-function moveTo(id, pos){
-    var aryPos = pos.split("-");
-    var x = aryPos[0]*tile_w;
-    var y = aryPos[1]*tile_h;
-    $('#'+id).animate({'top':y, 'left':x}, {'duration':move_speed});
-    //$('#'+id).offset({top:y, left:x});
-    $('#'+id).attr('id',pos);
-}
-
 //記錄成為Chain的珠子，分別在X和Y軸有多少相同的珠子
-function repeatMap(repeatX, repeatY, clr, xn, yn) {
+function RepeatMap(repeatX, repeatY, clr, xn, yn) {
     this.repeatX = repeatX;
     this.repeatY = repeatY;
     this.clr = clr;
     this.xn = xn;
     this.yn = yn;
-    return this;
 }
+
+var flagMatrix;
 
 //消除成為Chain的珠子
 function makeChain() {
+    
     //flagMatrix記錄每個珠子XY軸有多少相同珠，"2,3"表示X相鄰有2顆、Y相鄰有3顆 (Chain的例子)
-    var flagMatrix = new Array();
-    for ( i = 0; i < dim_x; i++) {
+    flagMatrix = new Array();
+    for ( var i = 0; i < dim_x; i++) {
         flagMatrix[i] = new Array();
     }
     //開始統計Chain，由左至右，由上而下的visit每一顆，記錄它的X,Y軸的鄰居擁有同色珠的數目(是否成為可消的Chain)
-    for ( x = 0; x < dim_x; x++) {
-        for ( y = 0; y < dim_y; y++) {
+    for ( var x = 0; x < dim_x; x++) {
+        for ( var y = 0; y < dim_y; y++) {
             var repeatX = 0;
             var repeatY = 0;
             var clr = '';
@@ -53,8 +27,8 @@ function makeChain() {
             var yn = 0;
             
             if (x > 0) {
-                var curX_TileClr = $('#'+x+'-'+y).attr('data-clr');
-                var lasX_TileClr = $('#'+(x-1)+'-'+y).attr('data-clr');
+                var curX_TileClr = $('#' + x + '-' + y).attr('data-clr');
+                var lasX_TileClr = $('#' + (x - 1) + '-' + y).attr('data-clr');
                 //目前X軸這顆的顏色 和 X軸上一顆的顏色 相同，repeatX+1
                 if (curX_TileClr == lasX_TileClr){
                     repeatX = flagMatrix[x-1][y].repeatX+1;
@@ -95,11 +69,7 @@ function makeChain() {
                 }
             }
            
-            flagMatrix[x][y] = new repeatMap(repeatX, repeatY, clr, xn, yn);
-            
-            //$('#'+x+'-'+y).html(flagMatrix[x][y].repeatX+':'+flagMatrix[x][y].repeatY);
-            // if (x > 0 || y > 0)
-            //    console.log("x: " + x + " y: " + y + " " + flagMatrix[x][y].repeatY + " " + flagMatrix[x][y].repeatY);
+            flagMatrix[x][y] = new RepeatMap(repeatX, repeatY, clr, xn, yn);
         }
     }
     
@@ -126,11 +96,11 @@ function makeChain() {
             aryChk.push(aryChains[i]);
             aryCombo[combo_n] = new Array();
             aryCombo[combo_n].push(aryChains[i]); //combo head
-            ap = aryChains[i].split('-');
+            var ap = aryChains[i].split('-');
             var x = parseInt(ap[0]);
             var y = parseInt(ap[1]);
-            rx = flagMatrix[x][y].repeatX;
-            ry = flagMatrix[x][y].repeatY;
+            var rx = flagMatrix[x][y].repeatX;
+            var ry = flagMatrix[x][y].repeatY;
             
             if (rx >= 2){
                 var ofs_x = rx - parseInt(flagMatrix[x][y].xn);
@@ -139,8 +109,8 @@ function makeChain() {
                     if (!isChecked(aryChk, (x + a) + '-' + y)){
                         aryChk.push((x + a)+ '-' +y);
                         aryCombo[combo_n].push((x+a)+'-'+y);
-                        sry = flagMatrix[x+a][y].repeatY;
-                        syn = flagMatrix[x+a][y].yn;
+                        var sry = flagMatrix[x+a][y].repeatY;
+                        var syn = flagMatrix[x+a][y].yn;
                         if (sry > 1){
                             var ofs_y = sry - syn;
                             var sy = y-ofs_y;
@@ -162,11 +132,11 @@ function makeChain() {
                     if (!isChecked(aryChk, x+'-'+(y+b))){
                         aryChk.push(x+'-'+(y+b));
                         aryCombo[combo_n].push(x+'-'+(y+b));
-                        srx = flagMatrix[x][y+b].repeatX;
-                        sxn = flagMatrix[x][y+b].xn;
+                        var srx = flagMatrix[x][y+b].repeatX;
+                        var sxn = flagMatrix[x][y+b].xn;
                         if (srx > 1){
                             var ofs_x = srx - sxn;
-                            var sx = x-ofs_x;
+                            var sx = x- ofs_x;
                             for (var sa=0; sa<=srx; sa++){
                                 if (!isChecked(aryChk, (sx+sa)+'-'+(y+b))){
                                     aryChk.push((sx+sa)+'-'+(y+b));
@@ -187,7 +157,7 @@ function makeChain() {
     for ( var d = 0; d < aryCombo.length; d++){
         for (var e = 0; e < aryCombo[d].length; e++){
             $('#'+aryCombo[d][e]).addClass('c'+d);
-            aryP = aryCombo[d][e].split('-');
+            var aryP = aryCombo[d][e].split('-');
             var x = aryP[0];
             var y = aryP[1];
             
@@ -211,8 +181,8 @@ function makeChain() {
     $( ".tile" ).promise().done(function() {
         if (flag){
             $('.tile').css('opacity',1);
-            //console.log(flagMatrix);
-            gravity();
+            fallNewTiles();
+            updateColorMatrix();
         }
     });
 }
@@ -221,7 +191,7 @@ function makeChain() {
 var markChain = function(aryChk, id){
     if (!isChecked(aryChk, id)){
         aryChk.push(id);
-        ary_pos = id.split('-');
+        var ary_pos = id.split('-');
         var x = parseInt(ary_pos[0]);
         var y = parseInt(ary_pos[1]);
         var p1,p2,p3,p4;
@@ -266,14 +236,15 @@ var markChain = function(aryChk, id){
 }
 
 var isChecked = function(aryChk, id){
-    for (s = 0; s < aryChk.length; s++) {
-		thisEntry = aryChk[s].toString();
+    for (var s = 0; s < aryChk.length; s++) {
+		var thisEntry = aryChk[s].toString();
 		if (thisEntry == id) {
 			return true;
         }
 	}
     return false;
 }
+
 //交換珠子
 function tileExchange(oid,nid){
     if (oid!=nid && 
@@ -302,17 +273,18 @@ function tileExchange(oid,nid){
 }
 
 //自然落珠+天降新珠
-function gravity() {
+function fallNewTiles() {
+    console.log('New tiles fall down.');
     //計算被消除的珠子產生的hole有多少，再把上方的珠子和被消除的珠子交換位置
     for ( x = 0; x < dim_x; x++) {
         var hole = 0;
         for ( y = dim_y - 1; y >= 0; y--) {
-            
-            if ('1'==$('#'+x+'-'+y).attr('data-gone')) {
+            if ('1' == $('#'+x+'-'+y).attr('data-gone')) {
                 hole++;
-            } else {
-                oldPos = x+'-'+y;
-                newPos = x+'-'+(y+hole);
+            } 
+            else {
+                var oldPos = x+'-'+y;
+                var newPos = x+'-'+(y+hole);
                 tileExchange(oldPos, newPos);
             }
         }
@@ -332,12 +304,13 @@ function gravity() {
         $(this).attr('data-clr',clr);
         
         $(this).removeAttr('data-gone');
-        oset = $(this).offset();
-        ol = oset.left;
-        ot = oset.top;
+        var oset = $(this).offset();
+        var ol = oset.left;
+        var ot = oset.top;
         $(this).css('z-index',999);
         $(this).offset({top:ot-300});
         $(this).animate({'top':ot, 'left':ol}, sky_speed);
     });
-    setTimeout(makeChain,sky_speed+100);
+    
+    setTimeout(makeChain, sky_speed + 100);
 }

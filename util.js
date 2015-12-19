@@ -57,3 +57,55 @@ function moveRight(currPos){
 	exchangePos(nextPos, currPos);
 	return nextPos;
 }
+
+// only use for AI search algorithm 
+// exchange two tiles' positions wihtout dragging
+function exchangePos(newPos, oldPos){
+    
+     $('#' + oldPos).addClass('select');
+     var oldPosArr = oldPos.split("-");
+     var newPosArr = newPos.split("-");
+     var x1 = newPosArr[0]*tile_w;
+     var y1 = newPosArr[1]*tile_h;
+     var x2 = oldPosArr[0]*tile_w;
+     var y2 = oldPosArr[1]*tile_h;
+     
+     exchangeColorsInMatrix(newPos, oldPos);
+     
+     $('#'+ newPos).animate({'top':y2, 'left':x2}, {'duration':move_speed});
+     $('#'+ oldPos).animate({'top':y1, 'left':x1}, {'duration':move_speed});
+     $('#'+ newPos).attr('id', oldPos);
+     $('.select').attr('id', newPos);
+     $('#' + newPos).removeClass('select');
+}
+
+//exchange the colors in the colorMatrix
+function exchangeColorsInMatrix(newPos, oldPos){
+     var oldPosArr = oldPos.split("-");
+     var newPosArr = newPos.split("-");
+     var tempClr = colorMatrix[newPosArr[0]][newPosArr[1]];     
+     colorMatrix[newPosArr[0]][newPosArr[1]] = colorMatrix[oldPosArr[0]][oldPosArr[1]];
+     colorMatrix[oldPosArr[0]][oldPosArr[1]] = tempClr;
+}
+
+// use for manually dragging
+// 移動珠子
+function moveTo(id, pos){
+    var aryPos = pos.split("-");
+    var x = aryPos[0]*tile_w;
+    var y = aryPos[1]*tile_h;
+    $('#'+id).animate({'top':y, 'left':x}, {'duration':move_speed});
+    $('#'+id).attr('id', pos);
+}
+
+function updateColorMatrix(){
+	for(var i = 0; i < dim_x; ++i){
+		for (var j =0; j < dim_y; ++j){
+			var pos = i + '-' + j;		
+			colorMatrix[i][j] = $('#' + pos).attr('data-clr');
+		}
+	}
+	// print current matrix status
+    console.log("color: ");
+	console.log(colorMatrix);
+}
