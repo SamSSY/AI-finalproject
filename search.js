@@ -85,6 +85,9 @@ function updateColorDensityScoreMatrix(){
 			colorDensityScoreMatrix[i][j] = score;
         }
     }
+	console.log("colorDensityScoreMatrix: ");
+	console.log(colorDensityScoreMatrix);
+	pickColorDensityScoreLargestTile();
 }
 
 function pickColorDensityScoreLargestTile(){
@@ -97,6 +100,9 @@ function pickColorDensityScoreLargestTile(){
 			}
 		}
 	}
+	
+	console.log("ColorDensityScoreLargestTile: ");
+	console.log((pos[0] + '-' + pos[1]));
 	return (pos[0] + '-' + pos[1]);
 }
 

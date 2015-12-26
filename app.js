@@ -183,6 +183,7 @@ function makeChain() {
             $('.tile').css('opacity',1);
             fallNewTiles();
             updateColorMatrix();
+            updateColorDensityScoreMatrix();
         }
     });
 }
