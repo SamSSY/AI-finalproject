@@ -1,3 +1,4 @@
+// global variables
 var def_clrs = ['r','g','b','p','y']; //紅,綠,藍,紫,黃
 var dim_x = 6; //盤面x顆數
 var dim_y = 5; //盤面y顆數

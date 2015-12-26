@@ -109,3 +109,18 @@ function updateColorMatrix(){
     console.log("color: ");
 	console.log(colorMatrix);
 }
+
+// to pick a random tile and return its x-y 
+function pickRandomTile(){
+	var randomX = Math.floor(( Math.random() * dim_x));
+	var randomY = Math.floor(( Math.random() * dim_y));
+	return (randomX + '-' + randomY);
+}
+
+
+//testing
+$(function() {
+	//setInterval(function(){
+	//	pickRandomTile(); 	
+	//}, 500);
+});
